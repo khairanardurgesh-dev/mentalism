@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  phone         String?   @unique
+  name          String?
+  image         String?
+  authProvider  String?   // 'google', 'phone', 'guest'
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  sessions      Session[]
+  payments      Payment[]
+  shares        Share[]
+}
+
+model Session {
+  id              String    @id @default(cuid())
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  ipAddress       String?
+  userAgent       String?
+  status          String    @default("started") // 'started', 'completed', 'abandoned'
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  
+  answers         Answer[]
+  personalityScores PersonalityScore[]
+  reports         Report[]
+}
+
+model Answer {
+  id              String    @id @default(cuid())
+  sessionId       String
+  session         Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionNumber  Int
+  answer          String
+  createdAt       DateTime  @default(now())
+  
+  @@unique([sessionId, questionNumber])
+}
+
+model PersonalityScore {
+  id              String    @id @default(cuid())
+  sessionId       String
+  session         Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  trait           String    // 'overthinking', 'confidence', 'relationshipFocus', etc.
+  score           Float
+  createdAt       DateTime  @default(now())
+  
+  @@unique([sessionId, trait])
+}
+
+model Report {
+  id              String    @id @default(cuid())
+  sessionId       String
+  session         Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  archetype       String    // 'The Dreamer', 'The Overthinker', etc.
+  headline        String
+  insights        Json      // Array of insight objects
+  reflectionQuestions Json
+  shareableLine   String
+  isPremium       Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+}
+
+model Payment {
+  id              String    @id @default(cuid())
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sessionId       String?
+  amount          Int
+  currency        String    @default("INR")
+  status          String    // 'pending', 'completed', 'failed', 'refunded'
+  paymentId       String?   // Razorpay payment ID
+  orderId         String?   // Razorpay order ID
+  tier            String    // 'basic', 'premium'
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Share {
+  id              String    @id @default(cuid())
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  platform        String    // 'whatsapp', 'instagram', 'twitter'
+  shareableLine   String
+  createdAt       DateTime  @default(now())
+}
+
+model Analytics {
+  id              String    @id @default(cuid())
+  eventType       String    // 'page_view', 'experiment_start', 'question_answered', etc.
+  sessionId       String?
+  metadata        Json?
+  createdAt       DateTime  @default(now())
+  
+  @@index([eventType])
+  @@index([createdAt])
+}

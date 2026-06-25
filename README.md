@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MindMirror
+
+AI-Powered Digital Mentalism Experience (Entertainment SaaS)
+
+An interactive experiment using psychology and patterns that creates the feeling of an impossible mind-reading experience.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, TypeScript, TailwindCSS, Framer Motion, Zustand
+- **Backend**: Node.js, PostgreSQL, Prisma ORM
+- **Authentication**: NextAuth (Google Login, Phone OTP, Guest Mode)
+- **Payments**: Razorpay
+- **AI**: Groq API
+- **Analytics**: PostHog
+- **Hosting**: Vercel, Supabase Database
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ installed
+- PostgreSQL database
+- Groq API key
+- Razorpay account
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up environment variables:
+```bash
+cp env.example .env
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Edit `.env` with your actual values:
+- `DATABASE_URL` - PostgreSQL connection string
+- `NEXTAUTH_SECRET` - Random secret string
+- `NEXTAUTH_URL` - Your app URL
+- `GOOGLE_CLIENT_ID` - Google OAuth client ID
+- `GOOGLE_CLIENT_SECRET` - Google OAuth client secret
+- `GROQ_API_KEY` - Groq API key
+- `RAZORPAY_KEY_ID` - Razorpay key ID
+- `RAZORPAY_KEY_SECRET` - Razorpay key secret
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Set up the database:
+```bash
+npx prisma migrate dev
+```
 
-## Learn More
+5. Run the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── experiment/        # Question flow page
+│   ├── analyzing/         # Analysis animation page
+│   ├── results/           # Results page
+│   └── admin/             # Admin dashboard
+├── components/            # React components
+├── lib/                   # Utility functions
+│   ├── questions.ts       # Question definitions
+│   ├── psychologyEngine.ts # Personality scoring
+│   ├── auth.ts           # Authentication config
+│   ├── prisma.ts         # Prisma client
+│   └── sound.ts          # Sound management
+└── store/                # Zustand stores
+```
 
-## Deploy on Vercel
+## Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **8-question psychological assessment**
+- **AI-generated personality insights** using Groq
+- **8 personality archetypes** with detailed readings
+- **Freemium model** with paywall
+- **Razorpay integration** for payments
+- **Shareable result cards** for social media
+- **Admin dashboard** for analytics
+- **Sound design** with toggle
+- **Mobile-first** responsive design
+- **PWA support** for mobile installation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Design Philosophy
+
+The product feels:
+- Mysterious
+- Premium
+- Magical
+- Personal
+- Trustworthy
+
+Color Palette:
+- Primary: #1C1638 (Deep Purple)
+- Secondary: #0B1026 (Dark Blue)
+- Accent: #D4AF37 (Gold)
+- Background: #050505
+
+## Legal Disclaimer
+
+This experience is for entertainment and self-reflection purposes only and does not provide psychological, medical, financial, or supernatural advice.
+
+## Deployment
+
+Deploy on Vercel:
+
+```bash
+vercel
+```
+
+Make sure to set environment variables in your Vercel project settings.
+
+## License
+
+Proprietary - All rights reserved

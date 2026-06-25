@@ -1,65 +1,112 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import Disclaimer from "@/components/Disclaimer";
 
 export default function Home() {
+  const router = useRouter();
+
+  const handleStart = () => {
+    router.push("/experiment");
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-b from-background via-secondary to-background">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-2xl w-full text-center"
+      >
+        {/* Logo/Brand */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-8"
+        >
+          <h1 className="text-5xl md:text-6xl font-extrabold font-poppins bg-gradient-to-r from-accent via-yellow-200 to-accent bg-clip-text text-transparent mb-2">
+            MindMirror
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-text-muted text-sm md:text-base">
+            Sometimes the mind reveals more than you expect.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        </motion.div>
+
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mb-12"
+        >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold font-poppins leading-tight mb-6 text-white">
+            Can we tell something surprisingly accurate about you in 60 seconds?
+          </h2>
+          <p className="text-lg md:text-xl text-text-muted mb-8">
+            An interactive experiment using psychology and patterns.
+          </p>
+
+          {/* CTA Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleStart}
+            className="px-8 py-4 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg shadow-lg hover:shadow-accent/50 transition-all duration-300 animate-glow"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Start Experiment
+          </motion.button>
+
+          {/* Social Proof */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="mt-6"
           >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <div className="flex items-center justify-center gap-1 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-accent text-xl">★</span>
+              ))}
+            </div>
+            <p className="text-text-muted text-sm">
+              Over 100,000 people have tried the experiment.
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Emotional Hook */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1 }}
+          className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-primary/30"
+        >
+          <h3 className="text-lg font-semibold font-poppins mb-4 text-accent">
+            Why try it?
+          </h3>
+          <ul className="space-y-3 text-left">
+            {[
+              "✓ No personal data required",
+              "✓ Takes less than 60 seconds",
+              "✓ Surprisingly personal results",
+            ].map((item, index) => (
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: 1.2 + index * 0.1 }}
+                className="text-text-muted"
+              >
+                {item}
+              </motion.li>
+            ))}
+          </ul>
+        </motion.div>
+      </motion.div>
+
+      <Disclaimer />
     </div>
   );
 }
