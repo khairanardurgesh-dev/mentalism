@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
@@ -15,12 +15,17 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#1C1638",
+};
+
 export const metadata: Metadata = {
   title: "MindMirror - The experiment that knows you surprisingly well",
   description: "An interactive experiment using psychology and patterns. Can we tell something surprisingly accurate about you in 60 seconds?",
   manifest: "/manifest.json",
-  themeColor: "#1C1638",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
