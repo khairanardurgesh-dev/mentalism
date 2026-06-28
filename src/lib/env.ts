@@ -76,8 +76,8 @@ export function validateEnv(): void {
     console.error("You can copy .env.example to .env and fill in the values.\n");
     console.error("=== End Validation Errors ===\n");
     
-    if (typeof window === "undefined") {
-      // Only throw in server-side context
+    // Only throw in runtime, not during build time
+    if (typeof window === "undefined" && process.env.NODE_ENV !== "test" && process.env.NEXT_PHASE !== "build") {
       throw new Error(
         `Missing required environment variables: ${missing.map((v) => v.name).join(", ")}`
       );
