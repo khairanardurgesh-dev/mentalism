@@ -51,22 +51,49 @@ export default function AnalyzingPage() {
             rotate: 360,
           }}
           transition={{
-            duration: 2,
+            duration: 3,
             repeat: Infinity,
             ease: "linear",
           }}
         >
-          <div className="absolute inset-0 rounded-full border-4 border-accent/30" />
-          <div className="absolute inset-2 rounded-full border-4 border-accent/50" />
-          <div className="absolute inset-4 rounded-full border-4 border-accent animate-pulse" />
           <motion.div
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 rounded-full border-4 border-accent/30"
             animate={{
-              scale: [1, 1.2, 1],
+              scale: [1, 1.1, 1],
+              opacity: [0.3, 0.6, 0.3],
             }}
             transition={{
               duration: 2,
               repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute inset-2 rounded-full border-4 border-accent/50"
+            animate={{
+              scale: [1, 0.9, 1],
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5,
+            }}
+          />
+          <motion.div
+            className="absolute inset-4 rounded-full border-4 border-accent animate-pulse-slow"
+          />
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center"
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 10, -10, 0],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
           >
             <div className="text-4xl">🔮</div>

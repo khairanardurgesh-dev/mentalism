@@ -134,12 +134,31 @@ export default function ResultsPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <div className="text-6xl mb-4">✨</div>
-          <h1 className="text-4xl md:text-5xl font-extrabold font-poppins bg-gradient-to-r from-accent via-yellow-200 to-accent bg-clip-text text-transparent mb-2">
+          <motion.div
+            initial={{ opacity: 0, rotate: -180 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="text-6xl mb-4"
+          >
+            ✨
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-4xl md:text-5xl font-extrabold font-poppins bg-gradient-to-r from-accent via-yellow-200 to-accent bg-clip-text text-transparent mb-2"
+          >
             {archetype}
-          </h1>
+          </motion.h1>
           {aiResult?.headline && (
-            <p className="text-lg text-text-muted">{aiResult.headline}</p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-lg text-text-muted"
+            >
+              {aiResult.headline}
+            </motion.p>
           )}
         </motion.div>
 
@@ -158,15 +177,15 @@ export default function ResultsPage() {
                 <AnimatePresence>
                   {showFirstInsight && aiResult?.insights[0] && (
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.8 }}
-                      className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30 text-center"
+                      initial={{ opacity: 0, scale: 0.95, rotateY: 90 }}
+                      animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30 text-center animate-breathe"
                     >
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
+                        transition={{ delay: 0.5 }}
                       >
                         <p className="text-white text-lg md:text-xl leading-relaxed font-medium">
                           {aiResult.insights[0].text}

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Disclaimer from "@/components/Disclaimer";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 export default function Home() {
   const router = useRouter();
@@ -83,10 +84,10 @@ export default function Home() {
               ))}
             </div>
             <p className="text-text-muted text-sm">
-              <span className="font-semibold text-white">103,481</span> people have taken the experiment.
+              <span className="font-semibold text-white"><AnimatedCounter end={103481} duration={2.5} /></span> people have taken the experiment.
             </p>
             <p className="text-text-muted text-sm">
-              <span className="font-semibold text-white">92%</span> said at least one insight felt surprisingly accurate.
+              <span className="font-semibold text-white"><AnimatedCounter end={92} duration={2} /></span>% said at least one insight felt surprisingly accurate.
             </p>
           </motion.div>
         </motion.div>

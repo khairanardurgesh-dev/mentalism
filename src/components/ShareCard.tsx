@@ -32,9 +32,14 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
   };
 
   const handleTwitterShare = () => {
-    const text = `Apparently I'm ${archetype}. ${shareableLine}`;
+    const text = `Apparently this experiment thinks I'm ${archetype}. ${shareableLine}`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
+  };
+
+  const handleInstagramShare = () => {
+    // Instagram doesn't have a direct share URL, so we download the image
+    handleDownload();
   };
 
   return (
@@ -42,7 +47,7 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
       {/* Share Card Preview */}
       <div
         ref={cardRef}
-        className="bg-gradient-to-br from-primary via-secondary to-background rounded-2xl p-8 border border-accent/30 relative overflow-hidden"
+        className="bg-gradient-to-br from-primary via-secondary to-background rounded-3xl p-8 border border-accent/30 relative overflow-hidden"
       >
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -52,7 +57,7 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
 
         {/* Content */}
         <div className="relative z-10 text-center">
-          <div className="text-4xl mb-4">✨</div>
+          <div className="text-5xl mb-4">✨</div>
           <h3 className="text-2xl font-extrabold font-poppins text-accent mb-2">
             MindMirror
           </h3>
@@ -60,12 +65,13 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
             The experiment that knows you surprisingly well
           </p>
           
-          <div className="bg-secondary/50 backdrop-blur-sm rounded-xl p-6 border border-primary/30 mb-4">
-            <p className="text-lg font-semibold font-poppins text-white mb-2">
+          <div className="bg-gradient-to-br from-accent/20 to-yellow-600/20 backdrop-blur-sm rounded-2xl p-6 border border-accent/40 mb-4">
+            <p className="text-sm text-text-muted mb-2">Apparently this experiment thinks I'm</p>
+            <p className="text-2xl font-extrabold font-poppins text-white mb-3">
               {archetype}
             </p>
-            <p className="text-text-muted text-sm leading-relaxed">
-              {shareableLine}
+            <p className="text-text-muted text-sm leading-relaxed italic">
+              "{shareableLine}"
             </p>
           </div>
 
@@ -81,7 +87,7 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleWhatsAppShare}
-          className="flex-1 py-3 bg-green-600 text-white font-semibold font-poppins rounded-full hover:bg-green-700 transition-all"
+          className="flex-1 py-3 h-14 bg-green-600 text-white font-semibold font-poppins rounded-full hover:bg-green-700 transition-all"
         >
           WhatsApp
         </motion.button>
@@ -90,7 +96,7 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleTwitterShare}
-          className="flex-1 py-3 bg-blue-400 text-white font-semibold font-poppins rounded-full hover:bg-blue-500 transition-all"
+          className="flex-1 py-3 h-14 bg-blue-400 text-white font-semibold font-poppins rounded-full hover:bg-blue-500 transition-all"
         >
           Twitter
         </motion.button>
@@ -98,8 +104,17 @@ export default function ShareCard({ archetype, shareableLine }: ShareCardProps) 
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={handleInstagramShare}
+          className="flex-1 py-3 h-14 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold font-poppins rounded-full hover:opacity-90 transition-all"
+        >
+          Instagram
+        </motion.button>
+        
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleDownload}
-          className="flex-1 py-3 bg-accent text-black font-semibold font-poppins rounded-full hover:bg-yellow-600 transition-all"
+          className="flex-1 py-3 h-14 bg-accent text-black font-semibold font-poppins rounded-full hover:bg-yellow-600 transition-all"
         >
           Download
         </motion.button>
