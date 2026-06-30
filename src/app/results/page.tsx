@@ -7,7 +7,7 @@ import Disclaimer from "@/components/Disclaimer";
 import ShareCard from "@/components/ShareCard";
 import { useExperimentStore } from "@/store/experimentStore";
 import { useResultsStore } from "@/store/resultsStore";
-import { calculatePersonalityScores, determineArchetype } from "@/lib/psychologyEngine";
+import { calculatePersonalityScores, determineArchetype, generatePremiumReport } from "@/lib/psychologyEngine";
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -27,6 +27,9 @@ export default function ResultsPage() {
 
   const [showPaywall, setShowPaywall] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
+  const [showFirstInsight, setShowFirstInsight] = useState(false);
+  const [showUnlockCTA, setShowUnlockCTA] = useState(false);
+  const [premiumReport, setPremiumReport] = useState<any>(null);
 
   useEffect(() => {
     const generateResults = async () => {
@@ -41,6 +44,10 @@ export default function ResultsPage() {
       
       setScores(calculatedScores);
       setArchetype(determinedArchetype);
+
+      // Generate premium report
+      const report = generatePremiumReport(calculatedScores, determinedArchetype);
+      setPremiumReport(report);
 
       // Generate AI insights
       try {
@@ -58,6 +65,16 @@ export default function ResultsPage() {
         if (response.ok) {
           const result = await response.json();
           setAIResult(result);
+          
+          // Progressive reveal: Show first insight after 2 seconds
+          setTimeout(() => {
+            setShowFirstInsight(true);
+          }, 2000);
+          
+          // Show unlock CTA after another 3 seconds
+          setTimeout(() => {
+            setShowUnlockCTA(true);
+          }, 5000);
         }
       } catch (error) {
         console.error("Error generating insights:", error);
@@ -71,6 +88,11 @@ export default function ResultsPage() {
 
   const handleUnlock = () => {
     setShowPaywall(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    setPremium(true);
+    setShowPaywall(false);
   };
 
   const handleShare = () => {
@@ -123,126 +145,252 @@ export default function ResultsPage() {
 
         {/* Insights */}
         <AnimatePresence mode="wait">
-          {!showPaywall ? (
-            <motion.div
-              key="free-result"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="space-y-6"
-            >
-              {/* Free Insight */}
-              {aiResult?.insights[0] && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-primary/30"
-                >
-                  <h3 className="text-accent font-semibold font-poppins mb-3">
-                    Your First Insight
-                  </h3>
-                  <p className="text-white leading-relaxed">
-                    {aiResult.insights[0].text}
-                  </p>
-                </motion.div>
-              )}
-
-              {/* Blurred Insights */}
-              <div className="space-y-4 blur-sm opacity-50">
-                {aiResult?.insights.slice(1).map((insight, index) => (
-                  <div
-                    key={index}
-                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-primary/30"
-                  >
-                    <h3 className="text-accent font-semibold font-poppins mb-3">
-                      {insight.type.replace(/_/g, " ").toUpperCase()}
-                    </h3>
-                    <p className="text-white leading-relaxed">
-                      {insight.text}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Unlock Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleUnlock}
-                className="w-full py-4 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg shadow-lg hover:shadow-accent/50 transition-all duration-300"
+          {!isPremium ? (
+            !showPaywall ? (
+              <motion.div
+                key="free-result"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
               >
-                Unlock Complete Reading
-              </motion.button>
-            </motion.div>
+                {/* First Insight - Progressive Reveal */}
+                <AnimatePresence>
+                  {showFirstInsight && aiResult?.insights[0] && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.8 }}
+                      className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30 text-center"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <p className="text-white text-lg md:text-xl leading-relaxed font-medium">
+                          {aiResult.insights[0].text}
+                        </p>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* There are more insights hint */}
+                <AnimatePresence>
+                  {showFirstInsight && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-center"
+                    >
+                      <p className="text-text-muted text-sm">
+                        There are 6 more observations.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Unlock Button - Progressive Reveal */}
+                <AnimatePresence>
+                  {showUnlockCTA && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleUnlock}
+                        className="w-full py-4 h-14 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg shadow-lg hover:shadow-accent/50 transition-all duration-300"
+                      >
+                        Unlock your complete reading
+                      </motion.button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="paywall"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-8 border border-accent/50 text-center"
+                >
+                  <h2 className="text-2xl font-extrabold font-poppins mb-2 text-accent">
+                    Your Mind Profile Is Ready
+                  </h2>
+                  <p className="text-text-muted mb-6">
+                    Unlock your complete reading
+                  </p>
+
+                  <div className="space-y-3 text-left mb-8">
+                    {[
+                      "✓ Hidden Strengths",
+                      "✓ Relationship Patterns",
+                      "✓ Emotional Blind Spots",
+                      "✓ Personal Insights",
+                    ].map((item, index) => (
+                      <motion.p
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="text-text-muted"
+                      >
+                        {item}
+                      </motion.p>
+                    ))}
+                  </div>
+
+                  <div className="space-y-4">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handlePaymentSuccess}
+                      className="w-full py-4 h-14 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg shadow-lg hover:shadow-accent/50 transition-all duration-300 animate-pulse-slow"
+                    >
+                      Unlock Now
+                      <span className="block text-sm font-normal">₹19</span>
+                    </motion.button>
+                    
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full py-4 border-2 border-accent text-accent font-semibold font-poppins rounded-full text-lg hover:bg-accent/10 transition-all"
+                    >
+                      Premium ₹49
+                      <span className="block text-xs font-normal text-text-muted">
+                        Extended report + Relationship analysis
+                      </span>
+                    </motion.button>
+                  </div>
+                </motion.div>
+
+                <motion.button
+                  onClick={() => setShowPaywall(false)}
+                  className="w-full text-text-muted hover:text-white transition-colors font-poppins"
+                >
+                  ← Back to free result
+                </motion.button>
+              </motion.div>
+            )
           ) : (
             <motion.div
-              key="paywall"
+              key="premium-report"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
               className="space-y-6"
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-8 border border-accent/50 text-center"
-              >
-                <h2 className="text-2xl font-extrabold font-poppins mb-2 text-accent">
-                  Your Mind Map is Ready
-                </h2>
-                <p className="text-text-muted mb-6">
-                  Unlock your complete reading
-                </p>
-
-                <div className="space-y-3 text-left mb-8">
-                  {[
-                    "✓ Complete personality profile",
-                    "✓ Hidden strengths revealed",
-                    "✓ Relationship patterns",
-                    "✓ Emotional tendencies",
-                    "✓ Personalized insights",
-                  ].map((item, index) => (
-                    <motion.p
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="text-text-muted"
-                    >
-                      {item}
-                    </motion.p>
-                  ))}
-                </div>
-
-                <div className="space-y-4">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg"
+              {premiumReport && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
                   >
-                    Unlock for ₹19
-                  </motion.button>
-                  
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 border-2 border-accent text-accent font-semibold font-poppins rounded-full text-lg hover:bg-accent/10 transition-all"
-                  >
-                    Premium ₹49
-                    <span className="block text-xs font-normal text-text-muted">
-                      Extended report + Relationship analysis
-                    </span>
-                  </motion.button>
-                </div>
-              </motion.div>
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      Your Hidden Strength
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.hiddenStrength}
+                    </p>
+                  </motion.div>
 
-              <motion.button
-                onClick={() => setShowPaywall(false)}
-                className="w-full text-text-muted hover:text-white transition-colors font-poppins"
-              >
-                ← Back to free result
-              </motion.button>
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
+                  >
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      The Side Of You People Miss
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.sidePeopleMiss}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
+                  >
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      What Drains Your Energy
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.drainsEnergy}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
+                  >
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      Relationship Pattern
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.relationshipPattern}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
+                  >
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      Your Inner Conflict
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.innerConflict}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
+                  >
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      The Question You Avoid Asking Yourself
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.questionYouAvoid}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-accent/30"
+                  >
+                    <h3 className="text-accent font-semibold font-poppins mb-3">
+                      Reflection Advice
+                    </h3>
+                    <p className="text-white leading-relaxed">
+                      {premiumReport.reflectionAdvice}
+                    </p>
+                  </motion.div>
+                </>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

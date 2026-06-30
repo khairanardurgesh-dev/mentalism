@@ -9,57 +9,57 @@ export interface Question {
 export const questions: Question[] = [
   {
     id: 1,
-    text: "Which picture feels most familiar to you?",
+    text: "Which sentence feels more familiar?",
     type: "choice",
     options: [
-      "A calm mountain lake at sunset",
-      "A busy city street at night",
-      "A quiet forest path",
-      "An ocean wave crashing"
+      "I replay conversations in my head.",
+      "I move on quickly.",
+      "Depends on the situation.",
+      "I don't know."
     ]
   },
   {
     id: 2,
-    text: "Which statement best describes your life right now?",
+    text: "Which area of life feels the most unfinished right now?",
     type: "choice",
     options: [
-      "I feel stuck in a routine",
-      "I am going through major changes",
-      "I have many goals I'm pursuing",
-      "I feel uncertain about the future"
+      "Career",
+      "Relationships",
+      "Personal goals",
+      "Something else"
     ]
   },
   {
     id: 3,
-    text: "How often do you find yourself overthinking decisions?",
+    text: "When you have free time, where does your mind usually go?",
     type: "choice",
     options: [
-      "Almost never",
-      "Sometimes",
-      "Often",
-      "Constantly"
+      "Thinking about the past",
+      "Planning the future",
+      "Enjoying the present",
+      "Worrying about something"
     ]
   },
   {
     id: 4,
-    text: "Do you feel that people often misunderstand you?",
+    text: "Which of these feels most true about you?",
     type: "choice",
     options: [
-      "No, people understand me well",
-      "Sometimes",
-      "Often",
-      "Yes, most people don't get me"
+      "I notice details others miss.",
+      "I see the big picture easily.",
+      "I'm good at both.",
+      "I'm not sure."
     ]
   },
   {
     id: 5,
-    text: "When making important decisions, do you trust your heart or your logic more?",
+    text: "Think about a recent decision you made. How did you feel after?",
     type: "choice",
     options: [
-      "My heart/intuition",
-      "My logic/reasoning",
-      "A balance of both",
-      "It depends on the situation"
+      "Confident it was right",
+      "Worried I made a mistake",
+      "Neutral, it is what it is",
+      "I still think about it"
     ]
   },
   {
@@ -70,24 +70,24 @@ export const questions: Question[] = [
   },
   {
     id: 7,
-    text: "What worries you most right now?",
+    text: "Which of these would you choose if you had to?",
     type: "choice",
     options: [
-      "Career and professional growth",
-      "Financial stability",
-      "Relationships and connections",
-      "The unknown future"
+      "Be understood by everyone",
+      "Understand everyone",
+      "Be left alone",
+      "Never be alone"
     ]
   },
   {
     id: 8,
-    text: "Which word attracts you the most right now?",
+    text: "When something unexpected happens, what's your first reaction?",
     type: "choice",
     options: [
-      "Freedom",
-      "Success",
-      "Love",
-      "Peace"
+      "Analyze what caused it",
+      "Feel the emotion first",
+      "Try to fix it immediately",
+      "Wait and see what happens"
     ]
   }
 ];

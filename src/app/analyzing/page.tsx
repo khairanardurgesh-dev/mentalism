@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import Disclaimer from "@/components/Disclaimer";
 
 const analysisSteps = [
-  "Analyzing patterns...",
-  "Finding emotional signals...",
-  "Building personality map...",
-  "One final observation...",
+  "Reading patterns...",
+  "Comparing emotional tendencies...",
+  "Looking for hidden similarities...",
+  "One observation keeps appearing...",
+  "Finalizing...",
 ];
 
 export default function AnalyzingPage() {
@@ -24,11 +25,11 @@ export default function AnalyzingPage() {
         }
         return prev;
       });
-    }, 2000); // 2 seconds per step, total 8 seconds
+    }, 2000); // 2 seconds per step, total 10 seconds
 
     const timeout = setTimeout(() => {
       router.push("/results");
-    }, 8000); // 8 seconds total
+    }, 10000); // 10 seconds total
 
     return () => {
       clearInterval(interval);
@@ -127,7 +128,7 @@ export default function AnalyzingPage() {
           transition={{ delay: 1 }}
           className="mt-8 text-text-muted text-sm"
         >
-          This usually takes about 8 seconds...
+          This usually takes about 10 seconds...
         </motion.p>
       </motion.div>
 

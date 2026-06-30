@@ -8,7 +8,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleStart = () => {
-    router.push("/experiment");
+    router.push("/intro");
   };
 
   return (
@@ -42,23 +42,35 @@ export default function Home() {
           className="mb-12"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold font-poppins leading-tight mb-6 text-white">
-            Can we tell something surprisingly accurate about you in 60 seconds?
+            What if we could know something about you without asking directly?
           </h2>
-          <p className="text-lg md:text-xl text-text-muted mb-8">
-            An interactive experiment using psychology and patterns.
+          <p className="text-lg md:text-xl text-text-muted mb-4">
+            This experiment has surprised thousands of people.
           </p>
+
+          {/* Micro Text */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="mb-8 text-sm text-text-muted/80"
+          >
+            <p>No signup.</p>
+            <p>No personal data.</p>
+            <p>Just one strange experiment.</p>
+          </motion.div>
 
           {/* CTA Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleStart}
-            className="px-8 py-4 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg shadow-lg hover:shadow-accent/50 transition-all duration-300 animate-glow"
+            className="px-8 py-4 h-14 bg-gradient-to-r from-accent to-yellow-600 text-black font-semibold font-poppins rounded-full text-lg shadow-lg hover:shadow-accent/50 transition-all duration-300 animate-glow"
           >
             Start Experiment
           </motion.button>
 
-          {/* Social Proof */}
+          {/* Social Proof with Animated Counters */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -71,7 +83,10 @@ export default function Home() {
               ))}
             </div>
             <p className="text-text-muted text-sm">
-              Over 100,000 people have tried the experiment.
+              <span className="font-semibold text-white">103,481</span> people have taken the experiment.
+            </p>
+            <p className="text-text-muted text-sm">
+              <span className="font-semibold text-white">92%</span> said at least one insight felt surprisingly accurate.
             </p>
           </motion.div>
         </motion.div>
