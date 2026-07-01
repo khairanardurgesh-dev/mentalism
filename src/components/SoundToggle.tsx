@@ -4,17 +4,24 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { soundManager } from "@/lib/sound";
 
+const SOUND_STORAGE_KEY = "mindmirror-sound-enabled";
+
 export default function SoundToggle() {
   const [isEnabled, setIsEnabled] = useState(true);
 
   useEffect(() => {
-    setIsEnabled(soundManager.isEnabled());
+    // Load preference from LocalStorage
+    const stored = localStorage.getItem(SOUND_STORAGE_KEY);
+    const enabled = stored !== null ? stored === "true" : true;
+    setIsEnabled(enabled);
+    soundManager.toggle(enabled);
   }, []);
 
   const handleToggle = () => {
     const newState = !isEnabled;
     soundManager.toggle(newState);
     setIsEnabled(newState);
+    localStorage.setItem(SOUND_STORAGE_KEY, String(newState));
   };
 
   return (

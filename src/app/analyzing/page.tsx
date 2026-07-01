@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Disclaimer from "@/components/Disclaimer";
+import { soundManager } from "@/lib/sound";
 
 const analysisSteps = [
   "Reading patterns...",
@@ -18,9 +19,14 @@ export default function AnalyzingPage() {
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
+    // Play ambient tension sound on mount
+    soundManager.playTyping();
+    
     const interval = setInterval(() => {
       setCurrentStep((prev) => {
         if (prev < analysisSteps.length - 1) {
+          // Play subtle sound on step change
+          soundManager.playTyping();
           return prev + 1;
         }
         return prev;
@@ -28,6 +34,7 @@ export default function AnalyzingPage() {
     }, 2000); // 2 seconds per step, total 10 seconds
 
     const timeout = setTimeout(() => {
+      soundManager.playReveal();
       router.push("/results");
     }, 10000); // 10 seconds total
 

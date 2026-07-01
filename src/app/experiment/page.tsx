@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Disclaimer from "@/components/Disclaimer";
 import { questions } from "@/lib/questions";
 import { useExperimentStore } from "@/store/experimentStore";
+import { soundManager } from "@/lib/sound";
 
 const revelations = {
   3: {
@@ -42,6 +43,7 @@ export default function ExperimentPage() {
 
   const handleAnswer = (answer: string) => {
     setAnswer(currentQuestionData.id, answer);
+    soundManager.playCardFlip();
     
     // Check if this question has a revelation
     if (revelations[currentQuestionData.id as keyof typeof revelations]) {
@@ -61,7 +63,10 @@ export default function ExperimentPage() {
   };
 
   const handleNext = () => {
-    if (currentAnswer) {
+    soundManager.playCardFlip();
+    // For thought type questions, proceed without answer
+    // For choice type questions, require an answer
+    if (currentQuestionData.type === "thought" || currentAnswer) {
       nextQuestion();
     }
   };

@@ -8,6 +8,7 @@ import ShareCard from "@/components/ShareCard";
 import { useExperimentStore } from "@/store/experimentStore";
 import { useResultsStore } from "@/store/resultsStore";
 import { calculatePersonalityScores, determineArchetype, generatePremiumReport } from "@/lib/psychologyEngine";
+import { soundManager } from "@/lib/sound";
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -65,6 +66,7 @@ export default function ResultsPage() {
         if (response.ok) {
           const result = await response.json();
           setAIResult(result);
+          soundManager.playReveal();
           
           // Progressive reveal: Show first insight after 2 seconds
           setTimeout(() => {
