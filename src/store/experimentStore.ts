@@ -34,7 +34,7 @@ export const useExperimentStore = create<ExperimentState>((set) => ({
     }),
   nextQuestion: () =>
     set((state) => ({
-      currentQuestion: Math.min(state.currentQuestion + 1, 7),
+      currentQuestion: state.currentQuestion + 1,
     })),
   previousQuestion: () =>
     set((state) => ({
